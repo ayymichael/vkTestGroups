@@ -45,6 +45,7 @@ function App() {
   ]
   const [sortSubscribed, setSortSubscribed] = React.useState<string>('не важно')
   const subscribedFriendsChoices = ['не важно', 'да', 'нет']
+  const [errorMarker, setErrorMarker] = React.useState(false)
 
   const selectFriends = (id: number) => {
     const found = groups.find((group) => group.id === id)
@@ -70,7 +71,7 @@ function App() {
       if (res.data) {
         setGroups(res.data)
       }
-    })
+    }).catch((err) => setErrorMarker(true))
   }, [])
 
   return (
@@ -118,7 +119,8 @@ function App() {
                     />
                   </FormItem>
                 </Group>
-                <Group header={<Header mode="secondary">Группы</Header>}>
+                {!errorMarker ? (
+                  <Group header={<Header mode="secondary">Группы</Header>}>
                   {groups
                     .filter((group) => {
                       if (sortPrivate === 'все') return true
@@ -166,6 +168,9 @@ function App() {
                       )
                     })}
                 </Group>
+                ) : (
+                  <Group header={<Header mode="secondary">Ошибка при загрузке данных</Header>}></Group>
+                )}
               </Panel>
               {selectedGroup.friends ? (
                 <Panel id="friends">

@@ -26,11 +26,11 @@ export interface User {
 }
 
 export const fetchGroups = (): Promise<GetGroupsResponse> => {
-
-
   return new Promise((res, rej) => {
     setTimeout(() => {
       res({ result: 1, data: groups })
+      rej({ result: 0})
+      rej({ result: 1})
     }, 1000)
   })
 }

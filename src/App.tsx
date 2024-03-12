@@ -1,5 +1,4 @@
-import * as React from 'react'
-// import { createRoot } from 'react-dom/client'
+import {  useState, useEffect } from 'react'
 import {
   AppRoot,
   SplitLayout,
@@ -14,7 +13,6 @@ import {
   PanelHeaderBack,
   Avatar,
   Button,
-  Cell,
   FormItem,
   CustomSelect,
 } from '@vkontakte/vkui'
@@ -22,18 +20,18 @@ import '@vkontakte/vkui/dist/vkui.css'
 import { GroupType, User, fetchGroups } from './api'
 
 function App() {
-  const [groups, setGroups] = React.useState<GroupType[]>([])
-  const [selectedGroup, setSelectedGroup] = React.useState<GroupType>({
+  const [groups, setGroups] = useState<GroupType[]>([])
+  const [selectedGroup, setSelectedGroup] = useState<GroupType>({
     id: 1,
     name: '',
     closed: false,
     members_count: 1,
   })
   const platform = usePlatform()
-  const [activePanel, setActivePanel] = React.useState('list')
-  const [sortPrivate, setSortPrivate] = React.useState<string>('все')
+  const [activePanel, setActivePanel] = useState('list')
+  const [sortPrivate, setSortPrivate] = useState<string>('все')
   const sortPrivateTypes = ['все', 'открытая', 'закрытая']
-  const [sortColor, setSortColor] = React.useState<string>('any')
+  const [sortColor, setSortColor] = useState<string>('any')
   const colors = [
     'any',
     'red',
@@ -43,9 +41,9 @@ function App() {
     'purple',
     'orange',
   ]
-  const [sortSubscribed, setSortSubscribed] = React.useState<string>('не важно')
+  const [sortSubscribed, setSortSubscribed] = useState<string>('не важно')
   const subscribedFriendsChoices = ['не важно', 'да', 'нет']
-  const [errorMarker, setErrorMarker] = React.useState(false)
+  const [errorMarker, setErrorMarker] = useState(false)
 
   const selectFriends = (id: number) => {
     const found = groups.find((group) => group.id === id)
@@ -55,18 +53,7 @@ function App() {
     setActivePanel('friends')
   }
 
-  // groups.filter((group) => {
-  // if (sortColor === 'любой') return true
-  //
-  // return group.avatar_color ? group.avatar_color === Object.keys(colors).find((key) => key === group.avatar_color) : false
-  // })
-  // console.log(Object.keys(colors).find((key) => key === 'red'));
-
-  function getValue<T extends object, U extends keyof T>(obj: T, prop: U): T[U] {
-    return obj[prop];
-  }
-
-  React.useEffect(() => {
+  useEffect(() => {
     fetchGroups().then((res) => {
       if (res.data) {
         setGroups(res.data)
